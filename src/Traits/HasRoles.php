@@ -47,7 +47,7 @@ trait HasRoles
         });
     }
 
-    public function syncRole($roleId)
+    public function syncRole(string $roleId)
     {
         try {
             $roleId = is_numeric($roleId) ? Role::findOrFail($roleId)->id : Role::where('name', $roleId)->firstOrFail()->id;

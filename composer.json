@@ -1,6 +1,16 @@
 {
     "name": "dungnt1312/dnt-permission",
     "description": "Simple laravel permission",
+    "keywords": [
+        "laravel-roles",
+        "laravel-permissions",
+        "laravel-levels",
+        "roles",
+        "permissions",
+        "acl",
+        "levels",
+        "laravel"
+    ],
     "autoload": {
         "psr-4": {
             "DNT\\Permission\\": "src/"
@@ -13,6 +23,15 @@
         }
     ],
     "require": {
+        "php": "^7.2|^8.0",
+        "laravel/framework": "7.*|8.*",
         "laravelcollective/html": "^6.2"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DNT\\Permission\\PermissionServiceProvider"
+            ]
+        }
     }
 }

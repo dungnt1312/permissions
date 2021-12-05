@@ -38,3 +38,10 @@ if (!function_exists('fn_get_permission_layout')) {
         return config('permission.layout', 'layouts.app');
     }
 }
+
+if (!function_exists('generate')) {
+    function generate(): \DNT\Permission\Generations\Generate
+    {
+        return \DNT\Permission\Generations\Generate::instance();
+    }
+}

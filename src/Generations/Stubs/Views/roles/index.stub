@@ -1,0 +1,53 @@
+@extends('$LAYOUT$')
+
+@section('content')
+    <div class="container">
+
+        <h2>Role Management</h2>
+        <div class="mb-3">
+            @permission('role-create')
+            <a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role</a>
+            @endpermission
+        </div>
+
+
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+        @if ($message = Session::get('error'))
+            <div class="alert alert-danger">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+        <table class="table table-bordered">
+            <tr>
+                <th>{{__('No')}}</th>
+                <th>{{__('Name')}}</th>
+                <th>{{__('Description')}}</th>
+                <th width="280px">Action</th>
+            </tr>
+            @foreach ($roles as $key => $role)
+                <tr>
+                    <td>{{ $loop->index + 1 }}</td>
+                    <td>{{ $role->name }}</td>
+                    <td>{{ $role->description }}</td>
+                    <td>
+                        @if($role->name != config('permission.role_super_admin'))
+                            @permission('role.update')
+                            <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
+                            @endpermission
+                            @permission('role.delete')
+                            <?= Form::open(['method' => 'delete', 'route' => ['roles.destroy', $role->id],'class'=>'d-inline-block']) ?>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <?= Form::close() ?>
+                            @endpermission
+                        @endif
+
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+@endsection

@@ -1,0 +1,2 @@
+Route::resource('roles',\$NAMESPACE_CONTROLLER$\RoleController::class)->middleware('auth');
+Route::resource('permissions',\$NAMESPACE_CONTROLLER$\PermissionController::class)->middleware('auth');

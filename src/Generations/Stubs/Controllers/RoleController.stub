@@ -1,0 +1,81 @@
+<?php
+
+namespace $NAMESPACE_CONTROLLER$;
+
+use DNT\Permission\Models\Permission;
+use DNT\Permission\Models\Role;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class RoleController extends Controller
+{
+    public function index(Request $request)
+    {
+        $roles = Role::all();
+        return view('$VIEW_PREFIX$roles.index', compact('roles'));
+    }
+
+    public function create()
+    {
+        $permission = Permission::get();
+        $rolePermissions = [];
+        return view('$VIEW_PREFIX$roles.create', compact('permission', 'rolePermissions'));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $this->validate($request, [
+            'name' => 'required|unique:roles,name',
+            'permission' => 'required',
+            'description' => 'sometimes'
+        ]);
+        $permissions = $data['permission'];
+        unset($data['permission']);
+        $role = Role::create($data);
+        $role->permissions()->sync($permissions);
+
+        return redirect()->route('roles.index')
+            ->with('success', 'Role created successfully');
+    }
+
+    public function show(Role $role)
+    {
+        $rolePermissions = $role->permissions->pluck('id')->all();
+        return view('$VIEW_PREFIX$roles.show', compact('role', 'rolePermissions'));
+    }
+
+    public function edit(Role $role)
+    {
+        $permission = Permission::get();
+        $rolePermissions = $role->permissions->pluck('id')->all();
+        return view('$VIEW_PREFIX$roles.edit', compact('role', 'permission', 'rolePermissions'));
+    }
+
+    public function update(Request $request, Role $role)
+    {
+        $data = $this->validate($request, [
+            'name' => 'required|unique:roles,name',
+            'permission' => 'required',
+            'description' => 'sometimes'
+        ]);
+        $permissions = $data['permission'];
+        unset($data['permission']);
+        $role->update($data);
+        $role->permissions()->sync($permissions);
+        return redirect()->route('roles.index')
+            ->with('success', 'Role updated successfully');
+    }
+
+    public function destroy(Role $role)
+    {
+        if ($role->checkIsUsing()) {
+            return redirect()->route('roles.index')
+                ->with('error', 'Role is using, cant delete');
+        } else {
+            $role->delete();
+            return redirect()->route('roles.index')
+                ->with('success', 'Role deleted successfully');
+        }
+
+    }
+}
