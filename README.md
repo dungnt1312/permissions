@@ -1,7 +1,7 @@
 ## Laravel Roles permissions - DungNT Version
 
 ### Install
-
+* Package require Auth::routes()
 * Install package
 
 ```bash
@@ -19,6 +19,17 @@ php artisan vendor:publish --provider="DNT\Permission\PermissionServiceProvider"
 ```bash
   php artisan permission:module
 ```
+* Model `App\Model\User` use Traits HasRoles;
+
+```php
+    use DNT\Permission\Traits\HasRoles;
+    class User extends Authenticatable
+    {
+        use HasRoles;
+        ...
+    }
+````
+
 
 ### Basic usage
 
